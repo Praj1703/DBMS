@@ -1,0 +1,61 @@
+create database Prajwal;
+
+use Prajwal;
+
+create table details(roll_no int(3), name varchar(20), dob date, marks float(5,2));
+
+show tables;
+
+describe details;
+
+alter table details add address varchar(30);
+
+alter table details add email varchar(25) after marks;
+
+alter table details add constraint pk_roll_no primary key (roll_no);
+
+alter table details add age int(3) after dob;
+
+alter table details modify age int(2);
+
+alter table details modify age INT NOT NULL;
+
+alter table details add grabe char(1) after marks;
+
+alter table details change grabe grade char;
+
+alter table details modify column grade varchar(5);
+
+alter table details modify column marks int(3);
+
+alter table details modify roll_no int AUTO_INCREMENT;
+
+rename table details to student_details;
+
+show tables;
+
+describe student_details;
+
+alter table student_details drop address;
+
+alter table student_details change dob DOB int(2)
+
+alter table student_details modify roll_no INT NOT NULL
+
+DESCRIBE student_details;
+
+truncate table student_details;
+
+INSERT INTO student_details VALUES (1, 'prajwal', '20050317', 20, 95, 'A', 'qwerty@gmail.xyz');
+
+ INSERT INTO student_details VALUES (2, 'OREO', '20060314', 20, 95, 'B', 'qwerty@gmail.xyz');
+
+INSERT INTO student_details VALUES (3, 'KITCAT', '20080314', 21, 95, 'B', 'qwerty@gmail.xyz');
+
+INSERT INTO student_details VALUES (4, 'CADBOURY', '20080326', 21, 95, 'A', 'qweSDF@gmail.xyz');
+
+INSERT INTO student_details VALUES (5, 'FF', '20020326', 21, 95, 'A', 'ASSDF@gmail.xyz');
+
+select * from student_details;
+
+
