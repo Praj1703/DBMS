@@ -1,0 +1,1035 @@
+student@student:~$ sudo mysql
+[sudo] password for student: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.42-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.01 sec)
+
+mysql> create database Prajwal;
+Query OK, 1 row affected (0.29 sec)
+
+mysql> 
+mysql> use Prajwal;
+Database changed
+mysql> 
+mysql> create table details(roll_no int(3), name varchar(20), dob date, marks float(5,2));
+Query OK, 0 rows affected, 2 warnings (1.31 sec)
+
+mysql> 
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| details           |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> describe details;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int         | YES  |     | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| dob     | date        | YES  |     | NULL    |       |
+| marks   | float(5,2)  | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.02 sec)
+
+mysql> 
+mysql> alter table details add address varchar(30);
+
+Query OK, 0 rows affected (2.41 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table details add email varchar(25) after marks;
+Query OK, 0 rows affected (1.19 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table details add constraint pk_roll_no primary key (roll_no);
+Query OK, 0 rows affected (0.71 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table details add age int(3) after dob;
+Query OK, 0 rows affected, 1 warning (0.70 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> 
+mysql> alter table details modify age int(2);
+Query OK, 0 rows affected, 1 warning (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> 
+mysql> alter table details modify age INT NOT NULL;
+Query OK, 0 rows affected (0.67 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table details add grabe char(1) after marks;
+Query OK, 0 rows affected (0.85 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table details change grabe grade char;
+Query OK, 0 rows affected (0.23 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table details modify column grade varchar(5);
+Query OK, 0 rows affected (0.94 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table details modify column marks int(3);
+Query OK, 0 rows affected, 1 warning (0.87 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> 
+mysql> alter table details modify roll_no int AUTO_INCREMENT;
+Query OK, 0 rows affected (0.98 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> rename table details to student_details;
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> 
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| student_details   |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> describe student_details;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| roll_no | int         | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(20) | YES  |     | NULL    |                |
+| dob     | date        | YES  |     | NULL    |                |
+| age     | int         | NO   |     | NULL    |                |
+| marks   | int         | YES  |     | NULL    |                |
+| grade   | varchar(5)  | YES  |     | NULL    |                |
+| email   | varchar(25) | YES  |     | NULL    |                |
+| address | varchar(30) | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+
+mysql> 
+mysql> alter table student_details drop address;
+Query OK, 0 rows affected (0.80 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table student_details change dob DOB int(2)
+    -> 
+    -> alter table student_details modify roll_no INT NOT NULL
+    -> 
+    -> DESCRIBE student_details;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'alter table student_details modify roll_no INT NOT NULL
+
+DESCRIBE student_detail' at line 3
+mysql> 
+mysql> truncate table student_details;
+Query OK, 0 rows affected (0.56 sec)
+
+mysql> 
+mysql> INSERT INTO student_details VALUES (1, 'prajwal', '20050317', 20, 95, 'A', 'qwerty@gmail.xyz');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> 
+mysql>  INSERT INTO student_details VALUES (2, 'OREO', '20060314', 20, 95, 'B', 'qwerty@gmail.xyz');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> 
+mysql> INSERT INTO student_details VALUES (3, 'KITCAT', '20080314', 21, 95, 'B', 'qwerty@gmail.xyz');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> 
+mysql> INSERT INTO student_details VALUES (4, 'CADBOURY', '20080326', 21, 95, 'A', 'qweSDF@gmail.xyz');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> 
+mysql> INSERT INTO student_details VALUES (5, 'FF', '20020326', 21, 95, 'A', 'ASSDF@gmail.xyz');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> 
+mysql> select * from student_details;
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
++---------+----------+------------+-----+-------+-------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Prajwal            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use Prajwal;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| student_details   |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> describe student_details;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| roll_no | int         | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(20) | YES  |     | NULL    |                |
+| dob     | date        | YES  |     | NULL    |                |
+| age     | int         | NO   |     | NULL    |                |
+| marks   | int         | YES  |     | NULL    |                |
+| grade   | varchar(5)  | YES  |     | NULL    |                |
+| email   | varchar(25) | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| student_details   |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> CREATE TABLE clas (
+    ->     roll_no INT,
+    ->     name VARCHAR(100),
+    ->     PRIMARY KEY (roll_no, name)
+    -> );
+Query OK, 0 rows affected (0.37 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| clas              |
+| student_details   |
++-------------------+
+2 rows in set (0.01 sec)
+
+mysql> rename clas to class;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'clas to class' at line 1
+mysql> rename table clas to class;
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| class             |
+| student_details   |
++-------------------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO clas (roll_no, name) VALUES (1, 'Alice');
+ERROR 1146 (42S02): Table 'Prajwal.clas' doesn't exist
+mysql> INSERT INTO clas (roll_no, name) VALUES (2, 'Bob');
+ERROR 1146 (42S02): Table 'Prajwal.clas' doesn't exist
+mysql> INSERT INTO clas (roll_no, name) VALUES (3, 'Charlie');
+ERROR 1146 (42S02): Table 'Prajwal.clas' doesn't exist
+mysql> INSERT INTO clas (roll_no, name) VALUES (4, 'Diana');
+ERROR 1146 (42S02): Table 'Prajwal.clas' doesn't exist
+mysql> INSERT INTO clas (roll_no, name) VALUES (5, 'Ethan');
+ERROR 1146 (42S02): Table 'Prajwal.clas' doesn't exist
+mysql> INSERT INTO class (roll_no, name) VALUES (1, 'Alice');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> INSERT INTO class (roll_no, name) VALUES (2, 'Bob');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> INSERT INTO class (roll_no, name) VALUES (3, 'Charlie');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO class (roll_no, name) VALUES (4, 'Diana');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> INSERT INTO class (roll_no, name) VALUES (5, 'Ethan');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> select student_details.name, class.roll_no from student_details inner join class on student_details.roll_no = class.roll_no;
++----------+---------+
+| name     | roll_no |
++----------+---------+
+| prajwal  |       1 |
+| OREO     |       2 |
+| KITCAT   |       3 |
+| CADBOURY |       4 |
+| FF       |       5 |
++----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from class;
++---------+---------+
+| roll_no | name    |
++---------+---------+
+|       1 | Alice   |
+|       2 | Bob     |
+|       3 | Charlie |
+|       4 | Diana   |
+|       5 | Ethan   |
++---------+---------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO class (roll_no, name) VALUES (105, 'Harvey');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select student_details.name, class.roll_no from student_details inner join class on student_details.roll_no = class.roll_no;
++----------+---------+
+| name     | roll_no |
++----------+---------+
+| prajwal  |       1 |
+| OREO     |       2 |
+| KITCAT   |       3 |
+| CADBOURY |       4 |
+| FF       |       5 |
++----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO student_details (roll_no, name) VALUES (110, 'Harvey');
+ERROR 1364 (HY000): Field 'age' doesn't have a default value
+mysql> INSERT INTO student_details (roll_no, name, age) VALUES (110, 'Harvey', 25);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> INSERT INTO student_details (roll_no, name, age) VALUES (105, 'Mike', 25);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select student_details.name, class.roll_no from student_details inner join class on student_details.roll_no = class.roll_no;
++----------+---------+
+| name     | roll_no |
++----------+---------+
+| prajwal  |       1 |
+| OREO     |       2 |
+| KITCAT   |       3 |
+| CADBOURY |       4 |
+| FF       |       5 |
+| Mike     |     105 |
++----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from student_details;
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from class;
++---------+---------+
+| roll_no | name    |
++---------+---------+
+|       1 | Alice   |
+|       2 | Bob     |
+|       3 | Charlie |
+|       4 | Diana   |
+|       5 | Ethan   |
+|     105 | Harvey  |
++---------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select class.name, class.roll_no from student_details inner join class on student_details.roll_no = class.roll_no;
++---------+---------+
+| name    | roll_no |
++---------+---------+
+| Alice   |       1 |
+| Bob     |       2 |
+| Charlie |       3 |
+| Diana   |       4 |
+| Ethan   |       5 |
+| Harvey  |     105 |
++---------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select student_details.name, class.roll_no from student_details left join class on student_details.roll_no = class.roll_no;
++----------+---------+
+| name     | roll_no |
++----------+---------+
+| prajwal  |       1 |
+| OREO     |       2 |
+| KITCAT   |       3 |
+| CADBOURY |       4 |
+| FF       |       5 |
+| Mike     |     105 |
+| Harvey   |    NULL |
++----------+---------+
+7 rows in set (0.01 sec)
+
+mysql> select student_details.name, class.roll_no from student_details right join class on student_details.roll_no = class.roll_no;
++----------+---------+
+| name     | roll_no |
++----------+---------+
+| prajwal  |       1 |
+| OREO     |       2 |
+| KITCAT   |       3 |
+| CADBOURY |       4 |
+| FF       |       5 |
+| Mike     |     105 |
++----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select student_details.age, class.roll_no from student_details right join class on student_details.roll_no = class.roll_no;
++------+---------+
+| age  | roll_no |
++------+---------+
+|   20 |       1 |
+|   20 |       2 |
+|   21 |       3 |
+|   21 |       4 |
+|   21 |       5 |
+|   25 |     105 |
++------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select student_details.age, class.roll_no from student_details left join class on student_details.roll_no = class.roll_no;
++-----+---------+
+| age | roll_no |
++-----+---------+
+|  20 |       1 |
+|  20 |       2 |
+|  21 |       3 |
+|  21 |       4 |
+|  21 |       5 |
+|  25 |     105 |
+|  25 |    NULL |
++-----+---------+
+7 rows in set (0.00 sec)
+
+mysql> select student_details.email, class.roll_no from student_details left join class on student_details.roll_no = class.roll_no;
++------------------+---------+
+| email            | roll_no |
++------------------+---------+
+| qwerty@gmail.xyz |       1 |
+| qwerty@gmail.xyz |       2 |
+| qwerty@gmail.xyz |       3 |
+| qweSDF@gmail.xyz |       4 |
+| ASSDF@gmail.xyz  |       5 |
+| NULL             |     105 |
+| NULL             |    NULL |
++------------------+---------+
+7 rows in set (0.00 sec)
+
+mysql> select student_details.email, class.roll_no from student_details right join class on student_details.roll_no = class.roll_no;
++------------------+---------+
+| email            | roll_no |
++------------------+---------+
+| qwerty@gmail.xyz |       1 |
+| qwerty@gmail.xyz |       2 |
+| qwerty@gmail.xyz |       3 |
+| qweSDF@gmail.xyz |       4 |
+| ASSDF@gmail.xyz  |       5 |
+| NULL             |     105 |
++------------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select student_details.email, class.roll_no from student_details full outer join class on student_details.roll_no = class.roll_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'outer join class on student_details.roll_no = class.roll_no' at line 1
+mysql> SELECT student_details.email, class.roll_no 
+    -> FROM student_details 
+    -> FULL OUTER JOIN class ON student_details.roll_no = class.roll_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'OUTER JOIN class ON student_details.roll_no = class.roll_no' at line 3
+mysql> SELECT student_details.name, class.roll_no  FROM student_details  FULL OUTER JOIN class ON student_details.roll_no = class.roll_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'OUTER JOIN class ON student_details.roll_no = class.roll_no' at line 1
+mysql> describe student_details;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| roll_no | int         | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(20) | YES  |     | NULL    |                |
+| dob     | date        | YES  |     | NULL    |                |
+| age     | int         | NO   |     | NULL    |                |
+| marks   | int         | YES  |     | NULL    |                |
+| grade   | varchar(5)  | YES  |     | NULL    |                |
+| email   | varchar(25) | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+7 rows in set (0.01 sec)
+
+mysql> SELECT student_details.name, class.roll_no  FROM student_details OUTER JOIN class ON student_details.roll_no = class.roll_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'OUTER JOIN class ON student_details.roll_no = class.roll_no' at line 1
+mysql> SELECT student_details.name, class.roll_no  FROM student_details full join class ON student_details.roll_no = class.roll_no;
+ERROR 1054 (42S22): Unknown column 'student_details.name' in 'field list'
+mysql> SELECT student_details.name, class.roll_no  FROM student_details outer join class ON student_details.roll_no = class.roll_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'outer join class ON student_details.roll_no = class.roll_no' at line 1
+mysql> SELECT student_details.name, class.roll_no  FROM student_details fullouter join class ON student_details.roll_no = class.roll_no;
+ERROR 1054 (42S22): Unknown column 'student_details.name' in 'field list'
+mysql> describe student_details;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| roll_no | int         | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(20) | YES  |     | NULL    |                |
+| dob     | date        | YES  |     | NULL    |                |
+| age     | int         | NO   |     | NULL    |                |
+| marks   | int         | YES  |     | NULL    |                |
+| grade   | varchar(5)  | YES  |     | NULL    |                |
+| email   | varchar(25) | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> describe class;
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| roll_no | int          | NO   | PRI | NULL    |       |
+| name    | varchar(100) | NO   | PRI | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT student_details.email, class.roll_no FROM student_details LEFT JOIN class ON student_details.roll_no = class.roll_no UNION SELECT student_details.email, class.roll_no FROM student_details RIGHT JOIN class ON student_details.roll_no = class.roll_no;
++------------------+---------+
+| email            | roll_no |
++------------------+---------+
+| qwerty@gmail.xyz |       1 |
+| qwerty@gmail.xyz |       2 |
+| qwerty@gmail.xyz |       3 |
+| qweSDF@gmail.xyz |       4 |
+| ASSDF@gmail.xyz  |       5 |
+| NULL             |     105 |
+| NULL             |    NULL |
++------------------+---------+
+7 rows in set (0.02 sec)
+
+mysql> select * from student_details;
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from class;
++---------+---------+
+| roll_no | name    |
++---------+---------+
+|       1 | Alice   |
+|       2 | Bob     |
+|       3 | Charlie |
+|       4 | Diana   |
+|       5 | Ethan   |
+|     105 | Harvey  |
++---------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from student_details where age < all (select name from student_details where age ='20');
+Empty set (0.02 sec)
+
+mysql> select * from student_details where age > all (select name from student_details where age ='20');
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from student_details where age = all (select name from student_details where age ='25');
+Empty set, 7 warnings (0.00 sec)
+
+mysql> select * from student_details where age = all (select name from student_details where age ='21');
+Empty set, 7 warnings (0.00 sec)
+
+mysql> select * from student_details where age > all (select name from student_details where age ='21');
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from student_details where age < all (select name from student_details where age ='21');
+Empty set (0.00 sec)
+
+mysql> select * from student_details where age > all (select name from student_details where grade ='A');
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from student_details where age < all (select name from student_details where grade ='A');
+Empty set (0.00 sec)
+
+mysql> select * from student_details where age < all (select age from student_details where grade ='A');
+Empty set (0.00 sec)
+
+mysql> select * from student_details where age > all (select age from student_details where grade ='A');
++---------+--------+------+-----+-------+-------+-------+
+| roll_no | name   | dob  | age | marks | grade | email |
++---------+--------+------+-----+-------+-------+-------+
+|     105 | Mike   | NULL |  25 |  NULL | NULL  | NULL  |
+|     110 | Harvey | NULL |  25 |  NULL | NULL  | NULL  |
++---------+--------+------+-----+-------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student_details where age > all (select age from student_details where grade =B);
+ERROR 1054 (42S22): Unknown column 'B' in 'where clause'
+mysql> select * from student_details where age > all (select age from student_details where grade = B);
+ERROR 1054 (42S22): Unknown column 'B' in 'where clause'
+mysql> select * from student_details where age > all (select age from student_details where grade = 'A');
++---------+--------+------+-----+-------+-------+-------+
+| roll_no | name   | dob  | age | marks | grade | email |
++---------+--------+------+-----+-------+-------+-------+
+|     105 | Mike   | NULL |  25 |  NULL | NULL  | NULL  |
+|     110 | Harvey | NULL |  25 |  NULL | NULL  | NULL  |
++---------+--------+------+-----+-------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student_details where age > all (select age from student_details where grade = 'NULL');
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from student_details where age > all (select age from student_details where grade = NULL);
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from student_details where age > all (select age from student_details where grade = '');
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from student_details where age > all (select age from student_details where grade = 'A');
++---------+--------+------+-----+-------+-------+-------+
+| roll_no | name   | dob  | age | marks | grade | email |
++---------+--------+------+-----+-------+-------+-------+
+|     105 | Mike   | NULL |  25 |  NULL | NULL  | NULL  |
+|     110 | Harvey | NULL |  25 |  NULL | NULL  | NULL  |
++---------+--------+------+-----+-------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student_details where age = any (select age from student_details where grade = 'A');
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
++---------+----------+------------+-----+-------+-------+------------------+
+5 rows in set (0.01 sec)
+
+mysql> select * from student_details where age exists (select age from student_details where grade = 'A');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'exists (select age from student_details where grade = 'A')' at line 1
+mysql> select * from student_details where exists (select age from student_details where grade = 'A');
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Customers (
+    ->     CustomerID INT NOT NULL,
+    ->     CustomerName VARCHAR(100) NOT NULL,
+    ->     ContactName VARCHAR(100),
+    ->     Address VARCHAR(255),
+    ->     City VARCHAR(100),
+    ->     PostalCode VARCHAR(20),
+    ->     Country VARCHAR(100),
+    ->     PRIMARY KEY (CustomerID)
+    -> );
+Query OK, 0 rows affected (0.63 sec)
+
+mysql> INSERT INTO Customers (CustomerID, CustomerName, ContactName, Address, City, PostalCode, Country) VALUES
+    -> (1, 'Alfreds Futterkiste', 'Maria Anders', 'Obere Str. 57', 'Berlin', '12209', 'Germany'),
+    -> (2, 'Ana Trujillo Emparedados y helados', 'Ana Trujillo', 'Avda. de la Constitución 2222', 'México D.F.', '05021', 'Mexico'),
+    -> (3, 'Antonio Moreno Taquería', 'Antonio Moreno', 'Mataderos 2312', 'México D.F.', '05023', 'Mexico'),
+    -> (4, 'Around the Horn', 'Thomas Hardy', '120 Hanover Sq.', 'London', 'WA1 1DP', 'UK'),
+    -> (5, 'Berglunds snabbköp', 'Christina Berglund', 'Berguvsvägen 8', 'Luleå', 'S-958 22', 'Sweden');
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> show tables;\
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| Customers         |
+| class             |
+| student_details   |
++-------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(CustomerID), Country
+    -> FROM Customers
+    -> GROUP BY Country
+    -> HAVING COUNT(CustomerID) > 5;
+Empty set (0.00 sec)
+
+mysql> SELECT COUNT(CustomerID), Country
+    -> FROM Customers
+    -> GROUP BY Country
+    -> HAVING COUNT(CustomerID) > 5
+    -> ORDER BY COUNT(CustomerID) DESC;
+Empty set (0.01 sec)
+
+mysql> select * from student_details order by age desc;
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.01 sec)
+
+mysql> select * from student_details order by age aesc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aesc' at line 1
+mysql> select * from student_details order by age asc;
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT CustomerName
+    -> FROM Customers
+    -> WHERE EXISTS (SELECT OrderAmount FROM Orders WHERE Orders.CustomerID = Customers.CustomerID AND OrderAmount < 100);
+ERROR 1146 (42S02): Table 'Prajwal.Orders' doesn't exist
+mysql> 
+mysql> select * from C
+CACHE              CHAIN              CHECKSUM           COLUMN             CONCAT_WS          CONV               CROSSES           
+CALL               CHANGE             CIPHER             COLUMNS            CONCURRENT         CONVERT            CUBE              
+CASCADE            CHANGED            CLIENT             COMMENT            CONDITION          CONVERT_TZ         CURDATE           
+CASCADED           CHAR               CLOSE              COMMIT             CONNECTION         COS                CURRENT_DATE      
+CASE               CHAR_LENGTH        COALESCE           COMMITTED          CONNECTION_ID      COT                CURRENT_TIME      
+CAST               CHARACTER          CODE               COMPACT            CONSISTENT         COUNT              CURRENT_TIMESTAMP 
+CEIL               CHARACTER_LENGTH   COERCIBILITY       COMPRESS           CONSTRAINT         CRC32              CURRENT_USER      
+CEILING            CHARSET            COLLATE            COMPRESSED         CONTAINS           CREATE             CURSOR            
+CENTROID           CHECK              COLLATION          CONCAT             CONTINUE           CROSS              CURTIME           
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| Customers         |
+| class             |
+| student_details   |
++-------------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from Customers;
++------------+------------------------------------+--------------------+--------------------------------+--------------+------------+---------+
+| CustomerID | CustomerName                       | ContactName        | Address                        | City         | PostalCode | Country |
++------------+------------------------------------+--------------------+--------------------------------+--------------+------------+---------+
+|          1 | Alfreds Futterkiste                | Maria Anders       | Obere Str. 57                  | Berlin       | 12209      | Germany |
+|          2 | Ana Trujillo Emparedados y helados | Ana Trujillo       | Avda. de la Constitución 2222  | México D.F.  | 05021      | Mexico  |
+|          3 | Antonio Moreno Taquería            | Antonio Moreno     | Mataderos 2312                 | México D.F.  | 05023      | Mexico  |
+|          4 | Around the Horn                    | Thomas Hardy       | 120 Hanover Sq.                | London       | WA1 1DP    | UK      |
+|          5 | Berglunds snabbköp                 | Christina Berglund | Berguvsvägen 8                 | Luleå        | S-958 22   | Sweden  |
++------------+------------------------------------+--------------------+--------------------------------+--------------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT CustomerName FROM Customers WHERE EXISTS (SELECT CustomerID FROM Customers WHERE Customers.CustomerID = Customers.Custom);
+[1]+  Stopped                 sudo mysql
+student@student:~$ sudo mysql
+[sudo] password for student: 
+Sorry, try again.
+[sudo] password for student: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.42-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use Prajwal;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| Customers         |
+| class             |
+| student_details   |
++-------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Customer
+CustomerID              Customers               Customers.City          Customers.Country       Customers.CustomerName 
+CustomerName            Customers.Address       Customers.ContactName   Customers.CustomerID    Customers.PostalCode   
+mysql> select * from Customers;
++------------+------------------------------------+--------------------+--------------------------------+--------------+------------+---------+
+| CustomerID | CustomerName                       | ContactName        | Address                        | City         | PostalCode | Country |
++------------+------------------------------------+--------------------+--------------------------------+--------------+------------+---------+
+|          1 | Alfreds Futterkiste                | Maria Anders       | Obere Str. 57                  | Berlin       | 12209      | Germany |
+|          2 | Ana Trujillo Emparedados y helados | Ana Trujillo       | Avda. de la Constitución 2222  | México D.F.  | 05021      | Mexico  |
+|          3 | Antonio Moreno Taquería            | Antonio Moreno     | Mataderos 2312                 | México D.F.  | 05023      | Mexico  |
+|          4 | Around the Horn                    | Thomas Hardy       | 120 Hanover Sq.                | London       | WA1 1DP    | UK      |
+|          5 | Berglunds snabbköp                 | Christina Berglund | Berguvsvägen 8                 | Luleå        | S-958 22   | Sweden  |
++------------+------------------------------------+--------------------+--------------------------------+--------------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select CustomerName, Address from Customers where City='Berlin' or Country = 'Mexico'
+    -> ^C
+mysql> select CustomerName, Address from Customers where City='Berlin' or Country = 'Mexico';
++------------------------------------+--------------------------------+
+| CustomerName                       | Address                        |
++------------------------------------+--------------------------------+
+| Alfreds Futterkiste                | Obere Str. 57                  |
+| Ana Trujillo Emparedados y helados | Avda. de la Constitución 2222  |
+| Antonio Moreno Taquería            | Mataderos 2312                 |
++------------------------------------+--------------------------------+
+3 rows in set (0.00 sec)
+
+mysql> select CustomerName, Address from Customers where City='Berlin' and Country = 'Mexico';
+Empty set (0.00 sec)
+
+mysql> select CustomerName, Address from Customers where City='Berlin' and Country = 'Germany';
++---------------------+---------------+
+| CustomerName        | Address       |
++---------------------+---------------+
+| Alfreds Futterkiste | Obere Str. 57 |
++---------------------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select CustomerName, Address from Customers where City='Berlin' not Country = 'Mexico';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Country = 'Mexico'' at line 1
+mysql> select CustomerName, Address from Customers where City='Berlin' not Country = 'Mexico';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Country = 'Mexico'' at line 1
+mysql> select CustomerName, Address from Customers where City='Berlin' not Country = 'Mexico';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Country = 'Mexico'' at line 1
+mysql> select CustomerName, Address from Customers where not Country = 'Mexico';
++---------------------+-----------------+
+| CustomerName        | Address         |
++---------------------+-----------------+
+| Alfreds Futterkiste | Obere Str. 57   |
+| Around the Horn     | 120 Hanover Sq. |
+| Berglunds snabbköp  | Berguvsvägen 8  |
++---------------------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select CustomerName, Address, Country from Customers where not Country = 'Mexico';
++---------------------+-----------------+---------+
+| CustomerName        | Address         | Country |
++---------------------+-----------------+---------+
+| Alfreds Futterkiste | Obere Str. 57   | Germany |
+| Around the Horn     | 120 Hanover Sq. | UK      |
+| Berglunds snabbköp  | Berguvsvägen 8  | Sweden  |
++---------------------+-----------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> show tables ;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| Customers         |
+| class             |
+| student_details   |
++-------------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from student_details
+    -> ^C
+mysql> select * from student_details;
++---------+----------+------------+-----+-------+-------+------------------+
+| roll_no | name     | dob        | age | marks | grade | email            |
++---------+----------+------------+-----+-------+-------+------------------+
+|       1 | prajwal  | 2005-03-17 |  20 |    95 | A     | qwerty@gmail.xyz |
+|       2 | OREO     | 2006-03-14 |  20 |    95 | B     | qwerty@gmail.xyz |
+|       3 | KITCAT   | 2008-03-14 |  21 |    95 | B     | qwerty@gmail.xyz |
+|       4 | CADBOURY | 2008-03-26 |  21 |    95 | A     | qweSDF@gmail.xyz |
+|       5 | FF       | 2002-03-26 |  21 |    95 | A     | ASSDF@gmail.xyz  |
+|     105 | Mike     | NULL       |  25 |  NULL | NULL  | NULL             |
+|     110 | Harvey   | NULL       |  25 |  NULL | NULL  | NULL             |
++---------+----------+------------+-----+-------+-------+------------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT roll_no, name, age,
+    -> CASE
+    ->     WHEN age > 21 THEN 'The age is greater than 21'
+    ->     WHEN age = 21 THEN 'The age is 21'
+    ->     ELSE 'The age is under 21'
+    -> END AS AgeText
+    -> FROM student_details
+    -> WHERE age < 21;
++---------+---------+-----+---------------------+
+| roll_no | name    | age | AgeText             |
++---------+---------+-----+---------------------+
+|       1 | prajwal |  20 | The age is under 21 |
+|       2 | OREO    |  20 | The age is under 21 |
++---------+---------+-----+---------------------+
+2 rows in set (0.00 sec)
+
+mysql> select name,roll 
+    -> ^C
+mysql> select name,roll_no from student_details where age=20;
++---------+---------+
+| name    | roll_no |
++---------+---------+
+| prajwal |       1 |
+| OREO    |       2 |
++---------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select min(age) from student_details;
++----------+
+| min(age) |
++----------+
+|       20 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select max(age) from student_details;
++----------+
+| max(age) |
++----------+
+|       25 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select name,max(age) from student_details;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'Prajwal.student_details.name'; this is incompatible with sql_mode=only_full_group_by
+mysql> select roll_no, name from student_details where age= max(age);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select marks(*) from student_details;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*) from student_details' at line 1
+mysql> select count(*) from student_details;
++----------+
+| count(*) |
++----------+
+|        7 |
++----------+
+1 row in set (0.05 sec)
+
+mysql> select sum(marks) from student_details;
++------------+
+| sum(marks) |
++------------+
+|        475 |
++------------+
+1 row in set (0.02 sec)
+
+mysql> select avg(age) from student_details;
++----------+
+| avg(age) |
++----------+
+|  21.8571 |
++----------+
+1 row in set (0.02 sec)
+
+mysql> 
