@@ -1,0 +1,174 @@
+create table employee with feilds emp_id, emp_name, city, post, salary, and department_no (insert minimum 10 records)
+1. display the information of the employees paid more than pooja from employee table
+	select * from employee where salary > (select salary from employee where emp_name = 'pooja');
+2. List the name of employee who lives in the same city as of rakesh.
+3. Display the information of employees paid greater salary than avg salary throughout the company
+4. Display the information of employees paid less salary than avg salary throughout the company
+5. Display the information of employees having max salaray in company
+6. Display the information of employees having min salary in company
+7. display the employee name, salary and department_no of those employees whos salary is higher than all developers salary.
+8. display the employee name, salary and department_no of those employees whos salary is lower than all developers salary.
+
+
+
+mysql> show tables;
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| Customers         |
+| class             |
+| student_details   |
++-------------------+
+3 rows in set (0.01 sec)
+
+mysql> create table employee (emp_id int(5), emp_name varchar(30), city varchar(10), post varchar(30), salary int(10), department_no int(3));
+Query OK, 0 rows affected, 3 warnings (0.52 sec)
+
+mysql> show tables; 
++-------------------+
+| Tables_in_Prajwal |
++-------------------+
+| Customers         |
+| class             |
+| employee          |
+| student_details   |
++-------------------+
+4 rows in set (0.00 sec)
+
+mysql> describe employee;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| emp_id        | int         | YES  |     | NULL    |       |
+| emp_name      | varchar(30) | YES  |     | NULL    |       |
+| city          | varchar(10) | YES  |     | NULL    |       |
+| post          | varchar(30) | YES  |     | NULL    |       |
+| salary        | int         | YES  |     | NULL    |       |
+| department_no | int         | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO employee VALUES
+    -> (101,'Pooja', 'Mumbai', 'Manager', 75000, 1),
+    -> (102,'Rakesh', 'Pune', 'Developer', 60000, 2),
+    -> (103,'Amit', 'Mumbai', 'Developer', 55000, 2),
+    -> (104,'Sita', 'Delhi', 'Analyst', 50000, 3),
+    -> (105,'Rahul', 'Pune', 'Developer', 58000, 2),
+    -> (106,'Neha', 'Mumbai', 'HR', 65000, 4),
+    -> (107,'Vikram', 'Delhi', 'Manager', 80000, 1),
+    -> (108,'Anita', 'Pune', 'Developer', 62000, 2),
+    -> (109,'Karan', 'Mumbai', 'Analyst', 52000, 3),
+    -> (110,'Riya', 'Delhi', 'HR', 48000, 4)
+    -> ;
+Query OK, 10 rows affected (0.09 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++--------+----------+--------+-----------+--------+---------------+
+| emp_id | emp_name | city   | post      | salary | department_no |
++--------+----------+--------+-----------+--------+---------------+
+|    101 | Pooja    | Mumbai | Manager   |  75000 |             1 |
+|    102 | Rakesh   | Pune   | Developer |  60000 |             2 |
+|    103 | Amit     | Mumbai | Developer |  55000 |             2 |
+|    104 | Sita     | Delhi  | Analyst   |  50000 |             3 |
+|    105 | Rahul    | Pune   | Developer |  58000 |             2 |
+|    106 | Neha     | Mumbai | HR        |  65000 |             4 |
+|    107 | Vikram   | Delhi  | Manager   |  80000 |             1 |
+|    108 | Anita    | Pune   | Developer |  62000 |             2 |
+|    109 | Karan    | Mumbai | Analyst   |  52000 |             3 |
+|    110 | Riya     | Delhi  | HR        |  48000 |             4 |
++--------+----------+--------+-----------+--------+---------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from employee where salary > (select salary from employee where emp_name = 'pooja');
++--------+----------+-------+---------+--------+---------------+
+| emp_id | emp_name | city  | post    | salary | department_no |
++--------+----------+-------+---------+--------+---------------+
+|    107 | Vikram   | Delhi | Manager |  80000 |             1 |
++--------+----------+-------+---------+--------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee where city = (select city from employee where emp_name = 'Rakesh');
++--------+----------+------+-----------+--------+---------------+
+| emp_id | emp_name | city | post      | salary | department_no |
++--------+----------+------+-----------+--------+---------------+
+|    102 | Rakesh   | Pune | Developer |  60000 |             2 |
+|    105 | Rahul    | Pune | Developer |  58000 |             2 |
+|    108 | Anita    | Pune | Developer |  62000 |             2 |
++--------+----------+------+-----------+--------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employee where salary > (select avg(salary) from employee);
++--------+----------+--------+-----------+--------+---------------+
+| emp_id | emp_name | city   | post      | salary | department_no |
++--------+----------+--------+-----------+--------+---------------+
+|    101 | Pooja    | Mumbai | Manager   |  75000 |             1 |
+|    106 | Neha     | Mumbai | HR        |  65000 |             4 |
+|    107 | Vikram   | Delhi  | Manager   |  80000 |             1 |
+|    108 | Anita    | Pune   | Developer |  62000 |             2 |
++--------+----------+--------+-----------+--------+---------------+
+4 rows in set (0.01 sec)
+
+mysql> select avg(salary) from employee;
++-------------+
+| avg(salary) |
++-------------+
+|  60500.0000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee where salary < (select avg(salary) from employee);
++--------+----------+--------+-----------+--------+---------------+
+| emp_id | emp_name | city   | post      | salary | department_no |
++--------+----------+--------+-----------+--------+---------------+
+|    102 | Rakesh   | Pune   | Developer |  60000 |             2 |
+|    103 | Amit     | Mumbai | Developer |  55000 |             2 |
+|    104 | Sita     | Delhi  | Analyst   |  50000 |             3 |
+|    105 | Rahul    | Pune   | Developer |  58000 |             2 |
+|    109 | Karan    | Mumbai | Analyst   |  52000 |             3 |
+|    110 | Riya     | Delhi  | HR        |  48000 |             4 |
++--------+----------+--------+-----------+--------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from employee where salary = (select max(salary) from employee);
++--------+----------+-------+---------+--------+---------------+
+| emp_id | emp_name | city  | post    | salary | department_no |
++--------+----------+-------+---------+--------+---------------+
+|    107 | Vikram   | Delhi | Manager |  80000 |             1 |
++--------+----------+-------+---------+--------+---------------+
+1 row in set (0.01 sec)
+
+mysql> select * from employee where salary = (select min(salary) from employee);
++--------+----------+-------+------+--------+---------------+
+| emp_id | emp_name | city  | post | salary | department_no |
++--------+----------+-------+------+--------+---------------+
+|    110 | Riya     | Delhi | HR   |  48000 |             4 |
++--------+----------+-------+------+--------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select emp_name, salary, department_no from employee where salary > (select * from employee where post = 'Developer');
+ERROR 1241 (21000): Operand should contain 1 column(s)
+mysql> select emp_name, salary, department_no from employee where salary > (select salary from employee where post = 'Developer');
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql> select emp_name, salary, department_no from employee where salary > all (select salary from employee where post = 'Developer');
++----------+--------+---------------+
+| emp_name | salary | department_no |
++----------+--------+---------------+
+| Pooja    |  75000 |             1 |
+| Neha     |  65000 |             4 |
+| Vikram   |  80000 |             1 |
++----------+--------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> select emp_name, salary, department_no from employee where salary < all (select salary from employee where post = 'Developer');
++----------+--------+---------------+
+| emp_name | salary | department_no |
++----------+--------+---------------+
+| Sita     |  50000 |             3 |
+| Karan    |  52000 |             3 |
+| Riya     |  48000 |             4 |
++----------+--------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+
