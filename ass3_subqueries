@@ -9,7 +9,7 @@ create table employee with feilds emp_id, emp_name, city, post, salary, and depa
 7. display the employee name, salary and department_no of those employees whos salary is higher than all developers salary.
 8. display the employee name, salary and department_no of those employees whos salary is lower than all developers salary.
 
-
+--create view emp_view as select emp_id, emp_name, salary where post = 'Developer';
 
 mysql> show tables;
 +-------------------+
@@ -169,6 +169,20 @@ mysql> select emp_name, salary, department_no from employee where salary < all (
 | Riya     |  48000 |             4 |
 +----------+--------+---------------+
 3 rows in set (0.00 sec)
+
+mysql> create view emp_view as select emp_id, emp_name, salary from employee where post = 'Developer';
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> select * from emp_view;
++--------+----------+--------+
+| emp_id | emp_name | salary |
++--------+----------+--------+
+|    102 | Rakesh   |  60000 |
+|    103 | Amit     |  55000 |
+|    105 | Rahul    |  58000 |
+|    108 | Anita    |  62000 |
++--------+----------+--------+
+4 rows in set (0.00 sec)
 
 mysql> 
 
