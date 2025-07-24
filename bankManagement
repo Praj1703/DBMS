@@ -1,0 +1,792 @@
+FOR THE FOLLOWING RELATION SCHEMA 
+ACCOUNT(ACCOUNT_NO, BRANCH_NAME, BALANCE)
+BRANCH(BRANCH_ID, BRANCH_NAME, BRANCH_CITY, ASSESTS)
+CUSTOMER(CUSTMER_ID, NAME, STREET, CITY)
+DEPOSITOR(CUSTOMER_ID, ACCOUNT_NO)
+LOAN(LOAN_NO, BRANCH_ID, AMOUNT)
+BORROWER(CUSTOMER_ID, LOAN_NO)
+
+create above tables and insert rows in each table solve following queries 
+1. find the branches where avg account balance is greater than 12000
+2. find all customers who have an  acc or loan or both at bank
+3. find all customers who have both acc but not loan
+4. delete all tupples at every branch located in 'Hinjawadi'
+5. maximum loan ammount in branch 'Hijawadi'
+6. find no of depositors at each branch
+7. for all accounts in Akurdi branch increase the balance by 10 percent
+
+
+root@student:/home/student# mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.42-0ubuntu0.22.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| Prajwal            |
+| bank               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| pharmacyManagement |
+| student            |
+| sys                |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> create database BankManagement;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> use BankManagement
+Database changed
+mysql> CREATE TABLE account (
+    ->     account_no INT PRIMARY KEY,
+    ->     branch_name VARCHAR(50),
+    ->     balance DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.36 sec)
+
+mysql> 
+mysql> CREATE TABLE branch (
+    ->     branch_id INT PRIMARY KEY,
+    ->     branch_name VARCHAR(50),
+    ->     branch_city VARCHAR(50),
+    ->     assets DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.47 sec)
+
+mysql> 
+mysql> CREATE TABLE customer (
+    ->     customer_id INT PRIMARY KEY,
+    ->     name VARCHAR(50),
+    ->     street VARCHAR(50),
+    ->     city VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> 
+mysql> CREATE TABLE depositor (
+    ->     customer_id INT,
+    ->     account_no INT,
+    ->     PRIMARY KEY (customer_id, account_no),
+    ->     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    ->     FOREIGN KEY (account_no) REFERENCES account(account_no)
+    -> );
+Query OK, 0 rows affected (0.57 sec)
+
+mysql> 
+mysql> CREATE TABLE loan (
+    ->     loan_no INT PRIMARY KEY,
+    ->     branch_id INT,
+    ->     amount DECIMAL(10, 2),
+    ->     FOREIGN KEY (branch_id) REFERENCES branch(branch_id)
+    -> );
+Query OK, 0 rows affected (0.44 sec)
+
+mysql> 
+mysql> CREATE TABLE borrower (
+    ->     customer_id INT,
+    ->     loan_no INT,
+    ->     PRIMARY KEY (customer_id, loan_no),
+    ->     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    ->     FOREIGN KEY (loan_no) REFERENCES loan(loan_no)
+    -> );
+Query OK, 0 rows affected (0.45 sec)
+
+mysql> show tables
+    -> ;
++--------------------------+
+| Tables_in_BankManagement |
++--------------------------+
+| account                  |
+| borrower                 |
+| branch                   |
+| customer                 |
+| depositor                |
+| loan                     |
++--------------------------+
+6 rows in set (0.01 sec)
+
+mysql> describe account;
++-------------+---------------+------+-----+---------+-------+
+| Field       | Type          | Null | Key | Default | Extra |
++-------------+---------------+------+-----+---------+-------+
+| account_no  | int           | NO   | PRI | NULL    |       |
+| branch_name | varchar(50)   | YES  |     | NULL    |       |
+| balance     | decimal(10,2) | YES  |     | NULL    |       |
++-------------+---------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe borrower;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| customer_id | int  | NO   | PRI | NULL    |       |
+| loan_no     | int  | NO   | PRI | NULL    |       |
++-------------+------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> describe branch;
++-------------+---------------+------+-----+---------+-------+
+| Field       | Type          | Null | Key | Default | Extra |
++-------------+---------------+------+-----+---------+-------+
+| branch_id   | int           | NO   | PRI | NULL    |       |
+| branch_name | varchar(50)   | YES  |     | NULL    |       |
+| branch_city | varchar(50)   | YES  |     | NULL    |       |
+| assets      | decimal(10,2) | YES  |     | NULL    |       |
++-------------+---------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> describe customer;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customer_id | int         | NO   | PRI | NULL    |       |
+| name        | varchar(50) | YES  |     | NULL    |       |
+| street      | varchar(50) | YES  |     | NULL    |       |
+| city        | varchar(50) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> describe loan;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| loan_no   | int           | NO   | PRI | NULL    |       |
+| branch_id | int           | YES  | MUL | NULL    |       |
+| amount    | decimal(10,2) | YES  |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe depositor;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| customer_id | int  | NO   | PRI | NULL    |       |
+| account_no  | int  | NO   | PRI | NULL    |       |
++-------------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO branch (branch_id, branch_name, branch_city, assets) VALUES
+    -> (1, 'Hinjawadi', 'Pune', 5000000),
+    -> (2, 'Akurdi', 'Pune', 3000000),
+    -> (3, 'Kharadi', 'Pune', 4000000),
+    -> (4, 'Wakad', 'Pune', 2500000),
+    -> (5, 'Baner', 'Pune', 3500000);
+Query OK, 5 rows affected (0.07 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO branch (branch_id, branch_name, branch_city, assets) VALUES
+    -> (1, 'Hinjawadi', 'Pune', 5000000),
+    -> (2, 'Akurdi', 'Pune', 3000000),
+    -> (3, 'Kharadi', 'Pune', 4000000),
+    -> (4, 'Wakad', 'Pune', 2500000),
+    -> (5, 'Baner', 'Pune', 3500000);
+ERROR 1062 (23000): Duplicate entry '1' for key 'branch.PRIMARY'
+mysql> 
+mysql> INSERT INTO account (account_no, branch_name, balance) VALUES
+    -> (101, 'Hinjawadi', 15000.00),
+    -> (102, 'Akurdi', 8000.00),
+    -> (103, 'Kharadi', 20000.00),
+    -> (104, 'Akurdi', 12000.00),
+    -> (105, 'Wakad', 18000.00),
+    -> (106, 'Baner', 22000.00);
+Query OK, 6 rows affected (0.06 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> INSERT INTO customer (customer_id, name, street, city) VALUES
+    -> (1, 'John Doe', 'Main St', 'Pune'),
+    -> (2, 'Jane Smith', 'Second St', 'Pune'),
+    -> (3, 'Alice Johnson', 'Third St', 'Pune'),
+    -> (4, 'Bob Brown', 'Fourth St', 'Pune'),
+    -> (5, 'Charlie Green', 'Fifth St', 'Pune');
+Query OK, 5 rows affected (0.07 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> INSERT INTO depositor (customer_id, account_no) VALUES
+    -> (1, 101),
+    -> (2, 102),
+    -> (1, 103),
+    -> (3, 104),
+    -> (4, 105);
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> INSERT INTO loan (loan_no, branch_id, amount) VALUES
+    -> (201, 1, 50000.00),
+    -> (202, 2, 30000.00),
+    -> (203, 3, 45000.00),
+    -> (204, 4, 25000.00),
+    -> (205, 5, 60000.00);
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> INSERT INTO borrower (customer_id, loan_no) VALUES
+    -> (1, 201),
+    -> (2, 202),
+    -> (3, 203),
+    -> (4, 204),
+    -> (5, 205);
+Query OK, 5 rows affected (0.11 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from account;
++------------+-------------+----------+
+| account_no | branch_name | balance  |
++------------+-------------+----------+
+|        101 | Hinjawadi   | 15000.00 |
+|        102 | Akurdi      |  8000.00 |
+|        103 | Kharadi     | 20000.00 |
+|        104 | Akurdi      | 12000.00 |
+|        105 | Wakad       | 18000.00 |
+|        106 | Baner       | 22000.00 |
++------------+-------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select * from customer\;
+ERROR: 
+Unknown command '\;'.
+    -> ^C
+mysql> select * from customer;
++-------------+---------------+-----------+------+
+| customer_id | name          | street    | city |
++-------------+---------------+-----------+------+
+|           1 | John Doe      | Main St   | Pune |
+|           2 | Jane Smith    | Second St | Pune |
+|           3 | Alice Johnson | Third St  | Pune |
+|           4 | Bob Brown     | Fourth St | Pune |
+|           5 | Charlie Green | Fifth St  | Pune |
++-------------+---------------+-----------+------+
+5 rows in set (0.00 sec)
+
+mysql> select * from borrower;
++-------------+---------+
+| customer_id | loan_no |
++-------------+---------+
+|           1 |     201 |
+|           2 |     202 |
+|           3 |     203 |
+|           4 |     204 |
+|           5 |     205 |
++-------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from branch;
++-----------+-------------+-------------+------------+
+| branch_id | branch_name | branch_city | assets     |
++-----------+-------------+-------------+------------+
+|         1 | Hinjawadi   | Pune        | 5000000.00 |
+|         2 | Akurdi      | Pune        | 3000000.00 |
+|         3 | Kharadi     | Pune        | 4000000.00 |
+|         4 | Wakad       | Pune        | 2500000.00 |
+|         5 | Baner       | Pune        | 3500000.00 |
++-----------+-------------+-------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from depositor;
++-------------+------------+
+| customer_id | account_no |
++-------------+------------+
+|           1 |        101 |
+|           2 |        102 |
+|           1 |        103 |
+|           3 |        104 |
+|           4 |        105 |
++-------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from loan;
++---------+-----------+----------+
+| loan_no | branch_id | amount   |
++---------+-----------+----------+
+|     201 |         1 | 50000.00 |
+|     202 |         2 | 30000.00 |
+|     203 |         3 | 45000.00 |
+|     204 |         4 | 25000.00 |
+|     205 |         5 | 60000.00 |
++---------+-----------+----------+
+5 rows in set (0.00 sec)
+
+mysql> UPDATE customer SET name = 'Ram' WHERE customer_id = 1;
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE customer SET name = 'Suresh' WHERE customer_id = 2;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE customer SET name = 'Amit' WHERE customer_id = 3;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE customer SET name = 'Ravi' WHERE customer_id = 4;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE customer SET name = 'Vijay' WHERE customer_id = 5;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from customer;
++-------------+--------+-----------+------+
+| customer_id | name   | street    | city |
++-------------+--------+-----------+------+
+|           1 | Ram    | Main St   | Pune |
+|           2 | Suresh | Second St | Pune |
+|           3 | Amit   | Third St  | Pune |
+|           4 | Ravi   | Fourth St | Pune |
+|           5 | Vijay  | Fifth St  | Pune |
++-------------+--------+-----------+------+
+5 rows in set (0.00 sec)
+
+mysql> --Find the branches where avg account balance is greater than 12000
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--Find the branches where avg account balance is greater than 12000' at line 1
+mysql> select branch_name from account group by branch_name having avg(balance) > 12000;
++-------------+
+| branch_name |
++-------------+
+| Hinjawadi   |
+| Kharadi     |
+| Wakad       |
+| Baner       |
++-------------+
+4 rows in set (0.02 sec)
+
+mysql> --find all customers who have an  acc or loan or both at bank
+    -> SELECT DISTINCT c.customer_id, c.name FROM customer c LEFT JOIN depositor d ON c.customer_id = d.customer_id LEFT JOIN borrower b ON c.customer_id = b.customer_id WHERE d.account_no IS NOT NULL OR b.loan_no IS NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--find all customers who have an  acc or loan or both at bank
+SELECT DISTINCT c.' at line 1
+mysql> SELECT DISTINCT c.customer_id, c.name
+    -> FROM customer c
+    -> JOIN depositor d ON c.customer_id = d.customer_id
+    -> 
+    -> UNION
+    -> 
+    -> SELECT DISTINCT c.customer_id, c.name
+    -> FROM customer c
+    -> JOIN borrower b ON c.customer_id = b.customer_id;
++-------------+--------+
+| customer_id | name   |
++-------------+--------+
+|           1 | Ram    |
+|           2 | Suresh |
+|           3 | Amit   |
+|           4 | Ravi   |
+|           5 | Vijay  |
++-------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> --find all customers who have both acc but not loan
+    -> SELECT DISTINCT c.customer_id, c.name FROM customer c JOIN depositor d ON c.customer_id = d.customer_id LEFT JOIN borrower b ON c.customer_id = b.customer_id GROUP BY c.customer_id HAVING COUNT(d.account_no) > 0 AND b.loan_no IS NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--find all customers who have both acc but not loan
+SELECT DISTINCT c.customer_i' at line 1
+mysql> SELECT DISTINCT c.customer_id, c.name
+    -> FROM customer c
+    -> JOIN depositor d ON c.customer_id = d.customer_id
+    -> LEFT JOIN borrower b ON c.customer_id = b.customer_id
+    -> GROUP BY c.customer_id
+    -> HAVING COUNT(d.account_no) > 0 AND b.loan_no IS NULL;
+ERROR 1054 (42S22): Unknown column 'b.loan_no' in 'having clause'
+mysql> SELECT c.customer_id, c.name
+    -> FROM customer c
+    -> JOIN depositor d ON c.customer_id = d.customer_id
+    -> LEFT JOIN borrower b ON c.customer_id = b.customer_id
+    -> GROUP BY c.customer_id, c.name
+    -> HAVING COUNT(d.account_no) > 0 AND COUNT(b.loan_no) = 0;
+Empty set (0.00 sec)
+
+mysql> SELECT c.customer_id, c.name
+    -> FROM customer c
+    -> JOIN depositor d ON c.customer_id = d.customer_id
+    -> LEFT JOIN borrower b ON c.customer_id = b.customer_id
+    -> GROUP BY c.customer_id, c.name
+    -> HAVING COUNT(d.account_no) > 0 AND COUNT(b.loan_no) = 0;
+Empty set (0.00 sec)
+
+mysql> SELECT c.customer_id, c.name
+    -> FROM customer c
+    -> JOIN depositor d ON c.customer_id = d.customer_id
+    -> LEFT JOIN borrower b ON c.customer_id = b.customer_id
+    -> GROUP BY c.customer_id, c.name
+    -> HAVING COUNT(d.account_no) > 0 AND COUNT(b.loan_no) = 0;
+Empty set (0.00 sec)
+
+mysql> select * from loan
+    -> ;
++---------+-----------+----------+
+| loan_no | branch_id | amount   |
++---------+-----------+----------+
+|     201 |         1 | 50000.00 |
+|     202 |         2 | 30000.00 |
+|     203 |         3 | 45000.00 |
+|     204 |         4 | 25000.00 |
+|     205 |         5 | 60000.00 |
++---------+-----------+----------+
+5 rows in set (0.00 sec)
+
+mysql> delete from loan where loan_no = 205;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`BankManagement`.`borrower`, CONSTRAINT `borrower_ibfk_2` FOREIGN KEY (`loan_no`) REFERENCES `loan` (`loan_no`))
+mysql> DELETE FROM `BankManagement`.`borrower`
+    -> WHERE `loan_no` = 205;
+Query OK, 1 row affected (0.12 sec)
+
+mysql> DELETE FROM `BankManagement`.`loan`
+    -> WHERE `loan_no` = 205;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> SELECT c.customer_id, c.name FROM customer c JOIN depositor d ON c.customer_id = d.customer_id LEFT JOIN borrower b ON c.customer_id =
+b.customer_id GROUP BY c.customer_id, c.name HAVING COUNT(d.account_no) > 0 AND COUNT(b.loan_no) = 0;
+Empty set (0.00 sec)
+
+mysql> SELECT c.customer_id, c.name
+    -> FROM customer c
+    -> JOIN depositor d ON c.customer_id = d.customer_id
+    -> LEFT JOIN borrower b ON c.customer_id = b.customer_id
+    -> WHERE b.loan_no IS NULL
+    -> GROUP BY c.customer_id, c.name;
+Empty set (0.02 sec)
+
+mysql> select * from loan;
++---------+-----------+----------+
+| loan_no | branch_id | amount   |
++---------+-----------+----------+
+|     201 |         1 | 50000.00 |
+|     202 |         2 | 30000.00 |
+|     203 |         3 | 45000.00 |
+|     204 |         4 | 25000.00 |
++---------+-----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from borrower;
++-------------+---------+
+| customer_id | loan_no |
++-------------+---------+
+|           1 |     201 |
+|           2 |     202 |
+|           3 |     203 |
+|           4 |     204 |
++-------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from branch;
++-----------+-------------+-------------+------------+
+| branch_id | branch_name | branch_city | assets     |
++-----------+-------------+-------------+------------+
+|         1 | Hinjawadi   | Pune        | 5000000.00 |
+|         2 | Akurdi      | Pune        | 3000000.00 |
+|         3 | Kharadi     | Pune        | 4000000.00 |
+|         4 | Wakad       | Pune        | 2500000.00 |
+|         5 | Baner       | Pune        | 3500000.00 |
++-----------+-------------+-------------+------------+
+5 rows in set (0.01 sec)
+
+mysql> DELETE FROM account WHERE branch_name = 'Hinjawadi';
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`BankManagement`.`depositor`, CONSTRAINT `depositor_ibfk_2` FOREIGN KEY (`account_no`) REFERENCES `account` (`account_no`))
+mysql> DELETE FROM depositor WHERE account_no IN (SELECT account_no FROM account WHERE branch_name = 'Hinjawadi');
+Query OK, 1 row affected (0.25 sec)
+
+mysql> DELETE FROM borrower WHERE loan_no IN (SELECT loan_no FROM loan WHERE branch_id = (SELECT branch_id FROM branch WHERE branch_name = 'Hinjawadi'));
+Query OK, 1 row affected (0.14 sec)
+
+mysql> DELETE FROM loan WHERE branch_id = (SELECT branch_id FROM branch WHERE branch_name = 'Hinjawadi');
+Query OK, 1 row affected (0.15 sec)
+
+mysql> DELETE FROM branch WHERE branch_name = 'Hinjawadi';
+Query OK, 1 row affected (0.17 sec)
+
+mysql> select * from borrower;
++-------------+---------+
+| customer_id | loan_no |
++-------------+---------+
+|           2 |     202 |
+|           3 |     203 |
+|           4 |     204 |
++-------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select * from loan;
++---------+-----------+----------+
+| loan_no | branch_id | amount   |
++---------+-----------+----------+
+|     202 |         2 | 30000.00 |
+|     203 |         3 | 45000.00 |
+|     204 |         4 | 25000.00 |
++---------+-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select * from branch;
++-----------+-------------+-------------+------------+
+| branch_id | branch_name | branch_city | assets     |
++-----------+-------------+-------------+------------+
+|         2 | Akurdi      | Pune        | 3000000.00 |
+|         3 | Kharadi     | Pune        | 4000000.00 |
+|         4 | Wakad       | Pune        | 2500000.00 |
+|         5 | Baner       | Pune        | 3500000.00 |
++-----------+-------------+-------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT MAX(amount) AS max_loan_amount
+    -> FROM loan
+    -> WHERE branch_id = (SELECT branch_id FROM branch WHERE branch_name = 'Hinjawadi');
++-----------------+
+| max_loan_amount |
++-----------------+
+|            NULL |
++-----------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT b.branch_name, COUNT(d.customer_id) AS number_of_depositors
+    -> FROM branch b
+    -> LEFT JOIN account a ON
+    -> 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> SELECT b.branch_name, COUNT(d.customer_id) AS number_of_depositors
+    -> FROM branch b
+    -> LEFT JOIN account a ON b.branch_name = a.branch_name
+    -> LEFT JOIN depositor d ON a.account_no = d.account_no
+    -> GROUP BY b.branch_name;
++-------------+----------------------+
+| branch_name | number_of_depositors |
++-------------+----------------------+
+| Akurdi      |                    2 |
+| Kharadi     |                    1 |
+| Wakad       |                    1 |
+| Baner       |                    0 |
++-------------+----------------------+
+4 rows in set (0.02 sec)
+
+mysql> select * form account;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'form account' at line 1
+mysql> select * from account;
++------------+-------------+----------+
+| account_no | branch_name | balance  |
++------------+-------------+----------+
+|        101 | Hinjawadi   | 15000.00 |
+|        102 | Akurdi      |  8000.00 |
+|        103 | Kharadi     | 20000.00 |
+|        104 | Akurdi      | 12000.00 |
+|        105 | Wakad       | 18000.00 |
+|        106 | Baner       | 22000.00 |
++------------+-------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> UPDATE account
+    -> SET balance = balance * 1.10
+    -> WHERE branch_name = 'Akurdi';
+Query OK, 2 rows affected (0.15 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from account;
++------------+-------------+----------+
+| account_no | branch_name | balance  |
++------------+-------------+----------+
+|        101 | Hinjawadi   | 15000.00 |
+|        102 | Akurdi      |  8800.00 |
+|        103 | Kharadi     | 20000.00 |
+|        104 | Akurdi      | 13200.00 |
+|        105 | Wakad       | 18000.00 |
+|        106 | Baner       | 22000.00 |
++------------+-------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> 
+
+
+
+
+
+-- Create Database
+CREATE DATABASE BankManagement;
+
+-- Use the database
+USE BankManagement;
+
+-- Create Tables
+CREATE TABLE account (
+    account_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    balance DECIMAL(10, 2)
+);
+
+CREATE TABLE branch (
+    branch_id INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    branch_city VARCHAR(50),
+    assets DECIMAL(10, 2)
+);
+
+CREATE TABLE customer (
+    customer_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    street VARCHAR(50),
+    city VARCHAR(50)
+);
+
+CREATE TABLE depositor (
+    customer_id INT,
+    account_no INT,
+    PRIMARY KEY (customer_id, account_no),
+    FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    FOREIGN KEY (account_no) REFERENCES account(account_no)
+);
+
+CREATE TABLE loan (
+    loan_no INT PRIMARY KEY,
+    branch_id INT,
+    amount DECIMAL(10, 2),
+    FOREIGN KEY (branch_id) REFERENCES branch(branch_id)
+);
+
+CREATE TABLE borrower (
+    customer_id INT,
+    loan_no INT,
+    PRIMARY KEY (customer_id, loan_no),
+    FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    FOREIGN KEY (loan_no) REFERENCES loan(loan_no)
+);
+
+-- Insert Data
+INSERT INTO branch (branch_id, branch_name, branch_city, assets) VALUES
+(1, 'Hinjawadi', 'Pune', 5000000),
+(2, 'Akurdi', 'Pune', 3000000),
+(3, 'Kharadi', 'Pune', 4000000),
+(4, 'Wakad', 'Pune', 2500000),
+(5, 'Baner', 'Pune', 3500000);
+
+INSERT INTO account (account_no, branch_name, balance) VALUES
+(101, 'Hinjawadi', 15000.00),
+(102, 'Akurdi', 8000.00),
+(103, 'Kharadi', 20000.00),
+(104, 'Akurdi', 12000.00),
+(105, 'Wakad', 18000.00),
+(106, 'Baner', 22000.00);
+
+INSERT INTO customer (customer_id, name, street, city) VALUES
+(1, 'John Doe', 'Main St', 'Pune'),
+(2, 'Jane Smith', 'Second St', 'Pune'),
+(3, 'Alice Johnson', 'Third St', 'Pune'),
+(4, 'Bob Brown', 'Fourth St', 'Pune'),
+(5, 'Charlie Green', 'Fifth St', 'Pune');
+
+INSERT INTO depositor (customer_id, account_no) VALUES
+(1, 101),
+(2, 102),
+(1, 103),
+(3, 104),
+(4, 105);
+
+INSERT INTO loan (loan_no, branch_id, amount) VALUES
+(201, 1, 50000.00),
+(202, 2, 30000.00),
+(203, 3, 45000.00),
+(204, 4, 25000.00),
+(205, 5, 60000.00);
+
+INSERT INTO borrower (customer_id, loan_no) VALUES
+(1, 201),
+(2, 202),
+(3, 203),
+(4, 204),
+(5, 205);
+
+-- Show tables
+SHOW TABLES;
+
+-- Show data from each table
+SELECT * FROM account;
+SELECT * FROM customer;
+SELECT * FROM borrower;
+SELECT * FROM branch;
+SELECT * FROM depositor;
+SELECT * FROM loan;
+
+-- Query 1: Find branches where the average account balance is greater than 12000
+SELECT branch_name
+FROM account
+GROUP BY branch_name
+HAVING AVG(balance) > 12000;
+
+-- Query 2: Find all customers who have an account or loan or both
+SELECT DISTINCT c.customer_id, c.name
+FROM customer c
+JOIN depositor d ON c.customer_id = d.customer_id
+UNION
+SELECT DISTINCT c.customer_id, c.name
+FROM customer c
+JOIN borrower b ON c.customer_id = b.customer_id;
+
+-- Query 3: Find customers who have both an account but not a loan
+SELECT DISTINCT c.customer_id, c.name
+FROM customer c
+JOIN depositor d ON c.customer_id = d.customer_id
+LEFT JOIN borrower b ON c.customer_id = b.customer_id
+GROUP BY c.customer_id
+HAVING COUNT(d.account_no) > 0 AND COUNT(b.loan_no) = 0;
+
+-- Query 4: Find maximum loan amount for branch "Hinjawadi"
+SELECT MAX(amount) AS max_loan_amount
+FROM loan
+WHERE branch_id = (SELECT branch_id FROM branch WHERE branch_name = 'Hinjawadi');
+
+-- Query 5: Find the number of depositors at each branch
+SELECT b.branch_name, COUNT(d.customer_id) AS number_of_depositors
+FROM branch b
+LEFT JOIN account a ON b.branch_name = a.branch_name
+LEFT JOIN depositor d ON a.account_no = d.account_no
+GROUP BY b.branch_name;
+
+-- Update customer names
+UPDATE customer SET name = 'Ram' WHERE customer_id = 1;
+UPDATE customer SET name = 'Suresh' WHERE customer_id = 2;
+UPDATE customer SET name = 'Amit' WHERE customer_id = 3;
+UPDATE customer SET name = 'Ravi' WHERE customer_id = 4;
+UPDATE customer SET name = 'Vijay' WHERE customer_id = 5;
+
+-- Show updated customer data
+SELECT * FROM customer;
+
+-- Delete loan and related data (cascading)
+-- Try deleting a loan (should fail due to foreign key constraint)
+DELETE FROM loan WHERE loan_no = 205;
+
+-- First remove dependent rows in borrower, then delete the loan
+DELETE FROM borrower WHERE loan_no = 205;
+DELETE FROM loan WHERE loan_no = 205;
+
+-- Delete records in account, borrower, and loan that are dependent on "Hinjawadi" branch
+DELETE FROM depositor WHERE account_no IN (SELECT account_no FROM account WHERE branch_name = 'Hinjawadi');
+DELETE FROM borrower WHERE loan_no IN (SELECT loan_no FROM loan WHERE branch_id = (SELECT branch_id FROM branch WHERE branch_name = 'Hinjawadi'));
+DELETE FROM loan WHERE branch_id = (SELECT branch_id FROM branch WHERE branch_name = 'Hinjawadi');
+DELETE FROM branch WHERE branch_name = 'Hinjawadi';
+
+-- Show updated data after deletion of "Hinjawadi" branch
+SELECT * FROM borrower;
+SELECT * FROM loan;
+SELECT * FROM branch;
+
+-- Example query: Find maximum loan amount for "Hinjawadi"
+SELECT MAX(amount) AS max_loan_amount
+FROM loan
+WHERE branch_id = (SELECT branch_id FROM branch WHERE branch_name = 'Hinjawadi');
+
